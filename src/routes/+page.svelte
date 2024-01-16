@@ -8,7 +8,7 @@
 		const raw = await (await fetch(url)).text();
 		const data = (new DOMParser()).parseFromString(raw, "text/html");
 
-		alert(data.body);
+		alert(data.body.innerHTML);
 	}
 </script>
 

@@ -97,7 +97,7 @@
 </script>
 
 <div class="url-input">
-	<input type="url" bind:value={url}>
+	<input type="url" bind:value={url} placeholder="Flo Profile URL">
 	<button type="button" on:click={() => get_data()}>Fetch</button>
 </div>
 

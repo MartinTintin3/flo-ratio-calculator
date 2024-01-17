@@ -1,6 +1,7 @@
 <script>
-	// Stuff
 	let url = "";
+	let current_name = "";
+
 	/**
 	 * @type {Array<{season: String, total: number, wins: number, losses: number, pins: number, techs: number, ratio: [number, number]}>}
 	 */
@@ -44,6 +45,8 @@
 		let data = [];
 
 		try {
+			current_name = parsedPage.body.querySelector("body > flo-root > div > div.flex-1.ng-tns-c168-0.content-wrapper > ng-component > flo-collection-view > flo-header-layout > main > div > div.col-12.col-lg-8.pt-0.pt-sm-2.content-container > div.header-container > flo-collection > nav > h1").innerText;
+
 			const list = Array.from(parsedPage.body.querySelector("body > flo-root > div > div.flex-1.ng-tns-c168-0.content-wrapper > ng-component > flo-collection-view > flo-header-layout > main > div > div.col-12.col-lg-8.pt-0.pt-sm-2.content-container > div.w-100 > ng-component > flo-collection-tab-view > flo-node-list").children).slice(1);
 			console.log(list);
 			for (const parsedItem of list) {
@@ -96,8 +99,11 @@
 </script>
 
 <div class="url-input">
-	<input type="url" bind:value={url} placeholder="Flo Profile URL">
-	<button type="button" on:click={() => get_data()}>Fetch</button>
+	<div>
+		<input type="url" bind:value={url} placeholder="Flo Profile URL">
+		<button type="button" on:click={() => get_data()}>Fetch</button>
+	</div>
+	<h2>{current_name}</h2>
 </div>
 
 {#each latest_data as item}
@@ -117,6 +123,10 @@
 		text-align: center;
 		margin: auto;
 		font-family: Arial, Helvetica, sans-serif;
+	}
+
+	.url-input > * {
+		padding: 0.1em;
 	}
 
 	.green {

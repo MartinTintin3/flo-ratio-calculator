@@ -1,4 +1,6 @@
 <script>
+  import { onMount } from "svelte";
+
 	let url = "";
 	let current_name = "";
 
@@ -96,6 +98,10 @@
 
 		latest_data = data;
 	}
+
+	onMount(() => {
+		alert("Data fetched from flowrestling.org/people is not guaranteed to be accurate. A parser for flowrestling.org/athletes is in the works.")
+	});
 </script>
 
 <div class="url-input">

@@ -83,7 +83,7 @@
 					}
 				}
 
-				item.ratio = reduce(item.wins, item.losses);
+				item.ratio = item.wins == 0 ? [0, item.losses] : item.losses != 0 ? reduce(item.wins, item.losses) : [item.wins, item.losses];
 
 				data.push(item);
 			}
@@ -109,7 +109,7 @@
 		<h2 class="red">{item.losses} losses</h2>
 		<h2>{item.pins} pins</h2>
 		<h2>{item.techs} techs</h2>
-		<h2>W/L Ratio <span class="green">{item.ratio[0]}</span>:<span class="red">{item.ratio[1]}</span> <span class="{item.ratio[0] > item.ratio[1] ? "green" : "red"}">({(Math.round(item.ratio[0]/item.ratio[1] * 100) / 100).toFixed(2)})</span></h2>
+		<h2>W/L Ratio <span class="green">{item.ratio[0]}</span>:<span class="red">{item.ratio[1]}</span> <span class="{item.ratio[0] > item.ratio[1] ? "green" : "red"}">({item.ratio[1] != 0 ? ((Math.round(item.ratio[0]/item.ratio[1] * 100) / 100).toFixed(2)) : item.ratio[0]})</span></h2>
 	</ul>
 {/each}
 

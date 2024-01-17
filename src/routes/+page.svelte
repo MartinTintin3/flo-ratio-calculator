@@ -1,8 +1,11 @@
 <script>
   import { onMount } from "svelte";
 
+	let search_input = "";
 	let url = "";
 	let current_name = "";
+
+	let loading = false;
 
 	/**
 	 * @type {Array<{season: String, total: number, wins: number, losses: number, pins: number, techs: number, ratio: [number, number]}>}
@@ -28,14 +31,34 @@
 	}
 	
 	const get_data = async () => {
+		loading = true;
+		
 		const headers = new Headers({
 			"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
 			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8"
 		});
 
-		const raw = await (await fetch(url, { method: "GET", headers })).text();
+		if (!search_input.includes("flowrestling.org")) {
+			const raw = await (await fetch(`https://www.flowrestling.org/search?q=${encodeURIComponent(search_input)}&page=1&type=person`, { method: "GET", headers })).text();
 
-		url = "";
+			const regex = /https:\/\/www\.flowrestling\.org\/people\/\d+-[^&]+/g;
+
+			const options = Array.from(raw.matchAll(regex));
+			
+			if (options.length > 0) {
+				url = options[0][0];
+			} else {
+				alert("No results found");
+				loading = false;
+				return;
+			}
+		} else {
+			url = search_input;
+		}
+
+		search_input = "";
+
+		const raw = await (await fetch(url, { method: "GET", headers })).text();
 
 		const parsedPage = (new DOMParser()).parseFromString(raw, "text/html");
 
@@ -97,6 +120,8 @@
 		}
 
 		latest_data = data;
+
+		loading = false;
 	}
 
 	onMount(() => {
@@ -106,7 +131,7 @@
 
 <div class="url-input">
 	<div>
-		<input type="url" bind:value={url} placeholder="Flo Profile URL">
+		<input type="text" bind:value={search_input} placeholder="Flo URL or full name">
 		<button type="button" on:click={() => get_data()}>Fetch</button>
 	</div>
 	<h2>{current_name}</h2>

@@ -139,6 +139,10 @@
 	});
 </script>
 
+<svelte:head>
+    <title>Flo Ratio Calculator{current_name ? ` | ${current_name}` : ""}</title> 
+</svelte:head>
+
 <div class="url-input">
 	<div>
 		<input type="text" bind:value={search_input} placeholder="Flo URL or full name">

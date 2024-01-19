@@ -1,8 +1,10 @@
 <script>
-  import { onMount } from "svelte";
+	import { page } from "$app/stores";
+	import { onMount } from "svelte";
 
 	let search_input = "";
 	let url = "";
+
 	let current_name = "";
 
 	let loading = false;
@@ -44,7 +46,7 @@
 			const regex = /https:\/\/www\.flowrestling\.org\/people\/\d+-[^&]+/g;
 
 			const options = Array.from(raw.matchAll(regex));
-			
+
 			if (options.length > 0) {
 				url = options[0][0];
 			} else {
@@ -55,6 +57,9 @@
 		} else {
 			url = search_input;
 		}
+
+		// set query param "url" to the url
+		history.pushState({}, null, `?url=${encodeURIComponent(url)}`);
 
 		search_input = "";
 
@@ -126,6 +131,11 @@
 
 	onMount(() => {
 		alert("Data fetched from flowrestling.org/people is not guaranteed to be accurate. A parser for flowrestling.org/athletes is in the works.")
+
+		if ($page.url.searchParams.get("url") != "") {
+			search_input = $page.url.searchParams.get("url");
+			get_data();
+		}
 	});
 </script>
 
